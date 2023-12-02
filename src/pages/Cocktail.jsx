@@ -1,4 +1,4 @@
-import { Link, Navigate, useLoaderData } from "react-router-dom"
+import { Link, Navigate, useLoaderData, useNavigate } from "react-router-dom"
 import axios from "axios"
 import Wrapper from "../assets/wrappers/CocktailPage";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ export const loader = (queryClient) => async ({ params }) => { /*Destructure par
 const Cocktail = () => {
   const { id } = useLoaderData();
   // if(!data) return <h2>Something went wrong...</h2> First Handlig option if there is no cocktail data to display
-  const {data} = useQuery(singleCocktailQuery(id));
+  const { data } = useQuery(singleCocktailQuery(id));
   if (!data) return <Navigate to='/' /> /*If there is no data to display just back to home*/
   const singleDrink = data.drinks[0];
   // console.log(singleDrink);
@@ -34,10 +34,16 @@ const Cocktail = () => {
   const validIngredients = Object.keys(singleDrink).filter((key) => key.startsWith('strIngredient') && singleDrink[key] !== null).map((key) => singleDrink[key]);
   // console.log(validIngredients);
 
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  }
+
   return (
     <Wrapper>
       <header>
-        <Link to='/' className="btn">Back to home</Link>
+        {/* <Link to='/' className="btn">Back to home</Link> */}
+        <button type="button" className="btn" onClick={goBack}>Back to home</button>
         <h3>{name}</h3>
       </header>
       <div className="drink">
